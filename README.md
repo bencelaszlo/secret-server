@@ -1,1 +1,1 @@
-# sercret-server
+# Sercret Manager Server
