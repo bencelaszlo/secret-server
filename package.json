@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node src/server/index.js",
-    "lint": "npx eslint --fix src/**/*.js",
+    "lint": "npx eslint src/**/*.js --fix",
     "serve": "vue-cli-service serve ./src/client/src/main.js",
     "build": "vue-cli-service build ./src/client/src/main.js"
   },
@@ -24,10 +24,13 @@
   },
   "homepage": "https://github.com/bencelaszlo/sercret-server#readme",
   "dependencies": {
+    "bcrypt": "^4.0.1",
     "body-parser": "^1.19.0",
+    "core-js": "^3.6.5",
     "cors": "^2.8.5",
     "express": "^4.17.1",
-    "core-js": "^3.6.5",
+    "mongodb": "^3.5.8",
+    "mongoose": "^5.9.16",
     "vue": "^2.6.11"
   },
   "devDependencies": {
