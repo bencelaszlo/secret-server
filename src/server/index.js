@@ -1,8 +1,7 @@
-const PORT = 8080
+const PORT = 3000
 
 // Require Express, CORS and Body Parser
 const express = require('express')
-const cors = require('cors')
 const bodyParser = require('body-parser')
 
 // Require and configurate bcrypt
@@ -26,10 +25,18 @@ app.use(bodyParser.urlencoded({
 
 app.use(bodyParser.json())
 
-app.use(cors())
+app.use(function (req, res, next) {
+  res.header('Access-Control-Allow-Origin', '*') // update to match the domain you will make the request from
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
+  next()
+})
 
 // Initialize the main project folder
 app.use(express.static('dist'))
+
+app.listen(PORT, () => {
+  console.log(`Application is running on ${PORT}`)
+})
 
 // Hash, compare and retrieve a secret
 app.get('/api/secret/:hash', async (req, res) => {
@@ -89,7 +96,7 @@ app.post('/api/secret/', (req, res) => {
         createdAt: new Date(),
         expiresAt: secretParams.expireAfter,
         isExpired: false,
-        remainingViews: secretParams.expireAfterViews
+        remainingViews: parseInt(secretParams.expireAfterViews)
       })
 
       secret.save()
@@ -98,6 +105,7 @@ app.post('/api/secret/', (req, res) => {
         hash: Buffer.from(secret.hash, 'utf8').toString('base64'),
         secretText: secret.secretText,
         createdAt: secret.createdAt,
+        expiresAt: secret.expiresAt,
         remainingViews: secret.remainingViews
       })
     })
@@ -105,8 +113,4 @@ app.post('/api/secret/', (req, res) => {
     console.error(JSON.stringify(error))
     res.status(500).send()
   }
-})
-
-app.listen(PORT, () => {
-  console.log(`Application is running on ${PORT}`)
 })
