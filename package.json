@@ -4,7 +4,7 @@
   "description": "Secret manager server in Node.JS + Express.JS with a minimal Vue.JS SPA as front-end.",
   "main": "index.js",
   "scripts": {
-    "start": "node src/server/index.js",
+    "start": "npm run build; node src/server/index.js",
     "lint": "npx eslint src/**/*.js --fix",
     "serve": "vue-cli-service serve ./src/client/src/main.js",
     "build": "vue-cli-service build ./src/client/src/main.js"
