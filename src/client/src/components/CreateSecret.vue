@@ -12,7 +12,7 @@
   </form>
 
   <modal name="saved-secret-modal" adaptive>
-    <h1>Saved Secret</h1>
+    <h2>Saved Secret</h2>
 
     <form>
 
@@ -56,11 +56,10 @@ export default {
   },
 
   methods: {
-    doCopy: function () {
-      this.$copyText(this.savedSecretModal.hash).then(function (e) {
+    doCopy () {
+      this.$copyText(this.savedSecretModal.hash).then(e => {
         alert('Secret hash has been copied to your clipboard')
-        console.log(e)
-      }, function (e) {
+      }, (e) => {
         alert('There was an error during copying secret hash')
       })
     },
@@ -87,8 +86,8 @@ export default {
         this.savedSecretModal = response.data
         this.$modal.show('saved-secret-modal')
       } catch (error) {
-        console.error(error)
-        alert('There was an error during saving secret')
+        console.error(error.response)
+        alert(error.response.data)
       }
     },
 
@@ -107,22 +106,6 @@ export default {
       }
 
       return errorMessages
-    },
-
-    viewSecret () {
-      /* const response = await fetch('http://localhost:3000/secret/JDJiJDEwJHZSL0QyMmFpTnFicXRYbi43b3hjSWV1RnhDNlgvdGZYbFN5bnVBb1FEYXNIdUVRR0tYQ25H', {
-        method: 'GET',
-        mode: 'cors',
-        cache: 'no-cache',
-        credentials: 'same-origin',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        redirect: 'follow',
-        referrerPolicy: 'no-referrer'
-      })
-      const data = response.json()
-      console.log(data) */
     }
   }
 }
@@ -130,6 +113,8 @@ export default {
 
 <style>
 .vm--modal {
-  height: 50% !important;
+  margin-top: -100px !important;
+  height: auto !important;
+  padding-bottom: 20px;
 }
 </style>
