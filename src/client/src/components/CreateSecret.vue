@@ -1,17 +1,21 @@
 <template>
-<div>
+<div class="content">
+  <h1>Create Secret</h1>
+
   <form>
+    <label for="secret-text">Secret Text</label><br>
     <input type="text" id="secret-text" name="secret-text" v-model="secretText" required><br>
+
     <label for="expires-after-views">Expires After Views</label><br>
-
     <input type="number" id="expire-after-views" name="expire-after-views" v-model="expireAfterViews" min="1" max="10" required><br>
-    <label for="expires-at">Time To Live (minutes)</label><br>
 
+    <label for="expires-at">Time To Live (minutes)</label><br>
     <input type="number" id="expires-at" name="expires-at" v-model="expiresAt" min="5" max="2880" required><br>
+
     <button @click="store($event)">Store Secret</button>
   </form>
 
-  <modal name="saved-secret-modal" adaptive>
+  <modal name="saved-secret-modal" class="modal" adaptive>
     <h2>Saved Secret</h2>
 
     <form>
@@ -111,7 +115,9 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
+@import '../style/main';
+
 .vm--modal {
   margin-top: -100px !important;
   height: auto !important;

@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="content">
         <h1>Retrieve Secret</h1>
 
         <form>
@@ -9,7 +9,7 @@
             <button @click="viewSecret($event)">Retrieve</button>
         </form>
 
-        <modal name="retrieved-secret-modal" adaptive>
+        <modal name="retrieved-secret-modal" class="modal" adaptive>
             <h2>Retrieved Secret</h2>
 
             <form>
@@ -88,7 +88,9 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
+@import '../style/main';
+
 .vm--modal {
   margin-top: -100px !important;
   height: auto !important;
