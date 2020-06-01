@@ -10,5 +10,8 @@ The default configuration sets up the server on the `3000` port.
 
 ### Locally
 
-1. Change `mongo:27017` to `127.0.0.1:27012` in `src/sever/db/mongoose.js` file.
-2. `npm start` 
+1. [Download](https://www.mongodb.com/download-center/community), install and run MongoDB locally.
+2. Change `mongo:27017` to `127.0.0.1:27012` in the `src/sever/db/mongoose.js` file.
+3. `npm start` 
+
+Alternatively, change the address to another MongoDB address in the `src/server/db/mongoose.js` file.
