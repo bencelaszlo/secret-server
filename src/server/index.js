@@ -44,38 +44,41 @@ app.get('/api/secret/:hash', async (req, res) => {
     const hashParam = req.params.hash
 
     if (!(hashParam && hashParam.length)) {
-      res.status(412).send('Password must be provided')
+      return res.status(412).send('Password must be provided')
     }
 
     const decodedHash = Buffer.from(hashParam, 'base64')
 
     const secret = await Secret.findOne({ hash: decodedHash })
     if (!secret) {
-      res.status(404).send('This secret does not exist')
+      return res.status(404).send('This secret does not exist')
     }
 
     if (new Date() > secret.expiresAt) {
       secret.isExpired = false
-      secret.save()
-      res.status(404).send('This secret is expired and not available anymore')
+      await secret.save()
+      return res.status(410).send('This secret is expired and not available anymore')
     }
 
-    if (secret.remainingViews <= 1) {
-      res.status(404).send('This secret has no remaining views')
+    if (secret.remainingViews <= 0) {
+      return res.status(410).send('This secret has no remaining views')
     }
 
     secret.remainingViews--
-    secret.save()
+    await secret.save()
 
-    res.status(200).send({
+    const response = {
       hash: Buffer.from(secret.hash, 'utf8').toString('base64'),
       secretText: secret.secretText,
       createdAt: secret.createdAt,
+      expiresAt: secret.expiresAt,
       remainingViews: secret.remainingViews
-    })
+    }
+
+    return res.status(200).send(response)
   } catch (error) {
     console.error(JSON.stringify(error))
-    res.status(500).send()
+    return res.status(500).send()
   }
 })
 
@@ -84,10 +87,10 @@ app.post('/api/secret/', (req, res) => {
   try {
     const secretParams = req.body
 
-    bcrypt.hash(secretParams.secret, saltRounds, (err, hash) => {
+    bcrypt.hash(secretParams.secret, saltRounds, async (err, hash) => {
       if (err) {
         console.error(JSON.stringify(err))
-        res.status(500).send()
+        return res.status(500).send()
       }
 
       const secret = new Secret({
@@ -99,9 +102,9 @@ app.post('/api/secret/', (req, res) => {
         remainingViews: parseInt(secretParams.expireAfterViews)
       })
 
-      secret.save()
+      await secret.save()
 
-      res.status(200).send({
+      return res.status(200).send({
         hash: Buffer.from(secret.hash, 'utf8').toString('base64'),
         secretText: secret.secretText,
         createdAt: secret.createdAt,
@@ -111,6 +114,6 @@ app.post('/api/secret/', (req, res) => {
     })
   } catch (error) {
     console.error(JSON.stringify(error))
-    res.status(500).send()
+    return res.status(500).send()
   }
 })
